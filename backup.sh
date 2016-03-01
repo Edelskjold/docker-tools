@@ -13,9 +13,9 @@ backupName="$name.$time"
 volume=$(docker inspect -f '{{ (index .Mounts 0).Source }}' $1)
 backupPath="$volume/"
 
-ssh backup@backup01.giraf.cs.aau.dk 'mkdir /srv/backup/jenkins'"$name"'';
+ssh "$backupServerUser"@"$backupServer" 'mkdir /srv/backup/jenkins'"$name"'';
 rsync -avzP --exclude "$2" "$backupPath" "$backupServerUser"@"$backupServer":/srv/backup/jenkins"$name""$backupName";
-ssh backup@backup01.giraf.cs.aau.dk 'tar cvfz /srv/backup/jenkins'"$name""$backupName"'.tar.gz /srv/backup/jenkins'"$name"'/*; rm -rf /srv/backup/jenkins'"$name"''"$backupName"$
+ssh "$backupServerUser"@"$backupServer" 'tar cvfz /srv/backup/jenkins'"$name""$backupName"'.tar.gz /srv/backup/jenkins'"$name"'/*; rm -rf /srv/backup/jenkins'"$name"''"$backupName"$
 
 docker logs "$1" > /home/backup/stdout.log 2>/home/backup/stderr.log
 scp /home/backup/stdout.log "$backupServerUser"@"$backupServer":/srv/backup/jenkins"$name""$backupName".stdout.log
