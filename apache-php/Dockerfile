@@ -28,6 +28,7 @@ ENV APACHE_LOG_DIR /var/log/apache2
 EXPOSE 80
 
 ADD www /var/www/site
+VOLUME ["/var/www/"]
 
 # Update the default apache configuration
 ADD apache-sites.conf /etc/apache2/sites-enabled/000-default.conf
